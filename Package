@@ -1,0 +1,13 @@
+{
+  "name": "fb-comment-bot",
+  "version": "1.0.0",
+  "description": "AI-powered Facebook comment auto-reply bot using Gemini",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "axios": "^1.7.2"
+  }
+}
