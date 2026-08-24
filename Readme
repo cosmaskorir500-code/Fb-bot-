@@ -1,0 +1,56 @@
+# Facebook Comment Auto-Reply Bot
+
+An AI bot that automatically replies to comments on your Facebook Page,
+using Google Gemini (free tier) to generate friendly/professional/funny replies.
+
+## How it works
+1. Facebook sends a "webhook" to this bot whenever someone comments on your Page.
+2. The bot sends that comment to Gemini, asking for a reply in your chosen tone.
+3. The bot posts Gemini's reply back onto the comment thread automatically.
+
+## Step 1: Deploy this code to Railway (free)
+1. Go to https://railway.app and sign up (you can use GitHub or email).
+2. Click "New Project" → "Deploy from GitHub repo" (you'll need to upload
+   this folder to a new GitHub repo first — Railway will walk you through it),
+   OR use "Empty Project" → "Deploy from local files" if offered.
+3. Once deployed, Railway will give you a public URL like:
+   `https://your-app-name.up.railway.app`
+
+## Step 2: Add your Environment Variables
+In your Railway project settings, go to "Variables" and add these 4:
+
+| Variable name        | Value                                    |
+|-----------------------|-------------------------------------------|
+| VERIFY_TOKEN          | Make up any random string, e.g. `myBotToken123` |
+| PAGE_ACCESS_TOKEN     | Your long-lived Facebook Page Access Token |
+| GEMINI_API_KEY        | Your Gemini API key                        |
+| PAGE_ID               | Your Facebook Page ID                      |
+
+Save, and Railway will redeploy automatically.
+
+## Step 3: Connect the webhook on Facebook
+1. Go to developers.facebook.com/apps → "Mypage Bot" → Products → Webhooks
+   (if you don't see Webhooks in the sidebar, click "Add Product" and add it)
+2. Click "Subscribe to this object" → choose "Page"
+3. Callback URL: `https://your-app-name.up.railway.app/webhook`
+4. Verify Token: the SAME string you used for VERIFY_TOKEN above
+5. Click "Verify and Save"
+6. Subscribe to the "feed" field (this covers comments)
+7. Go to your Page's settings → make sure the app is subscribed to your specific Page
+   (sometimes this needs a separate "Page Subscription" step under Webhooks)
+
+## Step 4: Test it
+Comment on one of your own Page's posts (from a different account/friend)
+and watch — within a few seconds, your bot should reply automatically.
+Check Railway's "Logs" tab to see what it's doing / any errors.
+
+## Editing the bot's tone/personality
+Open `index.js` and edit the `SYSTEM_PROMPT` text near the top —
+that's the instruction that controls how it replies.
+
+## Notes
+- Never share your PAGE_ACCESS_TOKEN, GEMINI_API_KEY, or App Secret with anyone.
+- Gemini's free tier has rate limits — fine for a small Page, may need
+  upgrading if you get a very high volume of comments.
+- Facebook Page Access Tokens (even "long-lived" ones) expire after ~60 days —
+  you'll need to regenerate one periodically unless you set up a System User token.
